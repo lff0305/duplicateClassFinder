@@ -16,6 +16,8 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,26 +30,50 @@ public class Plugin extends com.intellij.openapi.actionSystem.AnAction {
     public void actionPerformed(AnActionEvent anActionEvent) {
         Project project = anActionEvent.getProject();
         final ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
-        List<VirtualFile> result = (rootManager.getModuleSourceRoots(ContainerUtil.set(JavaSourceRootType.SOURCE)));
-
-        for (VirtualFile file : result) {
-            System.out.println("Module Root " + file);
-            Module module = ModuleUtil.findModuleForFile(file, project);
-            ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-
-            ModuleRootManager.getInstance(module).orderEntries().forEachLibrary(new Processor<Library>() {
-                @Override
-                public boolean process(Library library) {
-                    System.out.println("name = "+ library.getName() + " ");
-                    String[] urls = library.getRootProvider().getUrls(OrderRootType.CLASSES);
-                    System.out.println(Arrays.toString(urls));
-                    return true;
-                }
-            });
-        }
-
-        Dialog d = new Dialog();
+        Dialog d = new Dialog(project, rootManager);
         d.init();
+
+        d.getWindow().addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        d.process();
+                    }
+                });
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+
         d.show();
     }
 }
