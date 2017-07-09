@@ -23,6 +23,8 @@ import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.*;
 
 /**
@@ -41,8 +43,44 @@ public class Dialog extends DialogWrapper {
 
     public void init() {
         super.init();
-
         setTitle("Find Duplicate classes in classpath");
+
+        getWindow().addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                javax.swing.SwingUtilities.invokeLater(() -> process());
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
 
     }
 
@@ -80,7 +118,6 @@ public class Dialog extends DialogWrapper {
     public void process() {
 
         java.util.List<VirtualFile> result = (rootManager.getModuleSourceRoots(ContainerUtil.set(JavaSourceRootType.SOURCE)));
-
 
         Set<String> dependents = new HashSet<>();
         for (VirtualFile file : result) {

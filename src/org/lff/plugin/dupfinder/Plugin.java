@@ -32,48 +32,6 @@ public class Plugin extends com.intellij.openapi.actionSystem.AnAction {
         final ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
         Dialog d = new Dialog(project, rootManager);
         d.init();
-
-        d.getWindow().addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-                javax.swing.SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        d.process();
-                    }
-                });
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-
-            }
-        });
-
         d.show();
     }
 }
