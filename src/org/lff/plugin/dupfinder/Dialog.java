@@ -113,6 +113,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private JBTextField filter;
     private JButton btnOK;
     private JButton btnClear;
+    private JBLabel filterLabel;
 
     protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
@@ -138,6 +139,8 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         panelSearch.add(filter);
         panelSearch.add(btnOK);
         panelSearch.add(btnClear);
+        filterLabel = new JBLabel("0 classes filtered.");
+        panelSearch.add(filterLabel);
 
         btnOK.setEnabled(false);
         btnClear.setEnabled(false);
@@ -234,8 +237,11 @@ public class Dialog extends DialogWrapper implements ProgressListener {
                 result.add(clz);
             }
         }
+
         this.listModal.clear();
         this.listModal.addAll(result);
+
+        filterLabel.setText(String.valueOf(result.size() + " classes filtered."));
     }
 
 
@@ -243,5 +249,6 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         this.filter.setText("");
         this.listModal.clear();
         this.listModal.restore();
+        filterLabel.setText("0 classes filtered.");
     }
 }
