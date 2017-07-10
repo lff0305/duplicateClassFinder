@@ -46,6 +46,11 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
     public void init() {
         super.init();
+
+
+        listModal = new ClassListModel();
+        tableModel = new DuplicatesTableModel();
+
         setTitle("Find Duplicate classes in classpath");
 
         getWindow().addWindowListener(new WindowListener() {
@@ -95,7 +100,8 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private JProgressBar bar;
     private JBLabel label;
     private JBList myList;
-    private ClassListModal listModal = new ClassListModal();
+    private ClassListModel listModal;
+    private DuplicatesTableModel tableModel;
 
     protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
@@ -106,8 +112,10 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         final JBSplitter mainPanel = new JBSplitter(true, 1f / 3);
 
         mainPanel.setFirstComponent(ScrollPaneFactory.createScrollPane(myList));
-        mainPanel.setSecondComponent(ScrollPaneFactory.createScrollPane(new JBTable()));
+        mainPanel.setSecondComponent(ScrollPaneFactory.createScrollPane(new JBTable(tableModel)));
 
+
+        myList.addMouseListener(new ClassMouseListener(this.listModal, this.tableModel));
 
         north.add(label = new JBLabel("Duplicate classes found"));
         north.add(bar);
@@ -157,6 +165,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
                 this.listModal.clear();
                 clz.forEach(c -> {
                     this.listModal.add(c.getFullName());
+                    tableModel.setDependents(c.getFullName(), c.getDependents());
                 });
             });
         }).start();

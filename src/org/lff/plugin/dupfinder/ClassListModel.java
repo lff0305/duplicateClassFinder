@@ -8,11 +8,11 @@ import java.util.List;
  * @author Feifei Liu
  * @datetime Jul 10 2017 11:54
  */
-public class ClassListModal extends AbstractListModel<String> {
+public class ClassListModel extends AbstractListModel<String> {
     private static final long serialVersionUID = 7214161645270908310L;
     private final List<String> list = new ArrayList<>();
 
-    public ClassListModal() {
+    public ClassListModel() {
     }
 
     public List<String> getList() {
