@@ -5,5 +5,5 @@ package org.lff.plugin.dupfinder;
  * @datetime Jul 10 2017 11:04
  */
 public interface ProgressListener {
-    public void onProgess(int percent, String message);
+    public void onProgress(int percent, String message);
 }

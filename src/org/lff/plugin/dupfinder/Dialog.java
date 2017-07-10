@@ -8,25 +8,31 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
+import com.intellij.ui.components.JBTextField;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
+import org.jdesktop.swingx.HorizontalLayout;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 import org.lff.plugin.dupfinder.vo.DuplicateClass;
 import org.lff.plugin.dupfinder.vo.SourceVO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -104,6 +110,9 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private JBList myList;
     private ClassListModel listModal;
     private DuplicatesTableModel tableModel;
+    private JBTextField filter;
+    private JButton btnOK;
+    private JButton btnClear;
 
     protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
@@ -111,7 +120,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         JPanel north = new JPanel(new VerticalFlowLayout());
         bar = new JProgressBar(0, 100);
-        final JBSplitter mainPanel = new JBSplitter(true, 1f / 3);
+        final JBSplitter mainPanel = new JBSplitter(true, 2f / 5);
 
         mainPanel.setFirstComponent(ScrollPaneFactory.createScrollPane(myList));
         mainPanel.setSecondComponent(ScrollPaneFactory.createScrollPane(new JBTable(tableModel)));
@@ -122,10 +131,31 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         north.add(label = new JBLabel("Duplicate classes found"));
         north.add(bar);
 
+        JPanel panelSearch = new JPanel(new HorizontalLayout());
+        filter = new JBTextField("", 32);
+        btnOK = new JButton("Filter");
+        btnClear = new JButton("Clear");
+        panelSearch.add(filter);
+        panelSearch.add(btnOK);
+        panelSearch.add(btnClear);
+
+        btnOK.setEnabled(false);
+        btnClear.setEnabled(false);
+
+        north.add(panelSearch);
+
         panel.add(north, BorderLayout.NORTH);
         panel.add(mainPanel, BorderLayout.CENTER);
 
-        panel.setPreferredSize(new Dimension(800, 400));
+        panel.setPreferredSize(new Dimension(800, 600));
+
+
+        btnOK.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                applyFilter();
+            }
+        });
 
         return panel;
     }
@@ -161,6 +191,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private void process(List<SourceVO> dependents) {
         new Thread(()-> {
             List<DuplicateClass> clz = new Finder().process(this, dependents);
+            Collections.sort(clz);
             SwingUtilities.invokeLater(() -> {
                 this.listModal.clear();
                 clz.forEach(c -> {
@@ -168,15 +199,35 @@ public class Dialog extends DialogWrapper implements ProgressListener {
                     tableModel.setDependents(c.getFullName(), c.getDependents());
                 });
                 getWindow().setCursor(Cursor.getDefaultCursor());
+                btnOK.setEnabled(true);
+                btnClear.setEnabled(true);
             });
         }).start();
     }
 
     @Override
-    public void onProgess(int percent, String message) {
+    public void onProgress(int percent, String message) {
         SwingUtilities.invokeLater(() -> {
             this.bar.setValue(percent);
             this.label.setText(message);
         });
+    }
+
+    private void applyFilter() {
+        String filter = this.filter.getText();
+        if (filter.equals("") || filter.trim().equals("")) {
+            Messages.showMessageDialog(project,
+                    "Filter is empty", "Information",
+                    Messages.getInformationIcon());
+        }
+        this.listModal.saveList();
+        List<String> result = new ArrayList<>();
+        for (String clz : this.listModal.getList()) {
+            if (clz.contains(filter)) {
+                result.add(clz);
+            }
+        }
+        this.listModal.clear();
+        this.listModal.addAll(result);
     }
 }

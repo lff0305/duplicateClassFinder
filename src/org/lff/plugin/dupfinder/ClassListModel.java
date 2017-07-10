@@ -11,6 +11,7 @@ import java.util.List;
 public class ClassListModel extends AbstractListModel<String> {
     private static final long serialVersionUID = 7214161645270908310L;
     private final List<String> list = new ArrayList<>();
+    private List<String> savedList = new ArrayList<>();
 
     public ClassListModel() {
     }
@@ -42,5 +43,17 @@ public class ClassListModel extends AbstractListModel<String> {
         int index0 = list.size() - 1;
         int index1 = index0;
         fireIntervalAdded(this, index0, index1);
+    }
+
+    public void saveList() {
+        this.savedList = new ArrayList<>();
+        this.savedList.addAll(list);
+
+    }
+
+    public void addAll(List<String> result) {
+        int size = list.size();
+        this.list.addAll(result);
+        fireIntervalAdded(this, size, list.size() - 1);
     }
 }

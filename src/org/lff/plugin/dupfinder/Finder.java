@@ -26,7 +26,7 @@ public class Finder {
             String name = vo.getUrl();
             String library = vo.getLibrary();
             count++;
-            listener.onProgess((int)( 100 * count / (float)(totalSize)), "Processing " + name);
+            listener.onProgress((int)( 100 * count / (float)(totalSize)), "Processing " + name);
             if (name == null) {
                 continue;
             }
@@ -38,9 +38,9 @@ public class Finder {
                 }
             }
         }
-        listener.onProgess((int)(100 * (totalSize - 1) / (float)(totalSize)), "Calculating... ");
+        listener.onProgress((int)(100 * (totalSize - 1) / (float)(totalSize)), "Calculating... ");
         List<DuplicateClass> result = findDuplicates(map);
-        listener.onProgess(100, "Finished. " + result.size() + " duplicate class found in " + dependents.size() +
+        listener.onProgress(100, "Finished. " + result.size() + " duplicate class found in " + dependents.size() +
                         " files");
         logger.info("--- Duplicates " + result.size() + " START ---");
         for (DuplicateClass clz : result) {
