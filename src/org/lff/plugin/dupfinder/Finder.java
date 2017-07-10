@@ -18,7 +18,7 @@ public class Finder {
 
     private static final Logger logger = Logger.getLogger(Finder.class.getName());
 
-    public static List<DuplicateClass> process(ProgressListener listener, List<SourceVO> dependents) {
+    public List<DuplicateClass> process(ProgressListener listener, List<SourceVO> dependents) {
         Map<String, HashSet<SourceVO>> map = new HashMap<>();
         int totalSize = dependents.size() + 2;
         int count = 0;
@@ -50,7 +50,7 @@ public class Finder {
         return result;
     }
 
-    private static List<DuplicateClass> findDuplicates(Map<String, HashSet<SourceVO>> map) {
+    private List<DuplicateClass> findDuplicates(Map<String, HashSet<SourceVO>> map) {
         List<DuplicateClass> result = new ArrayList<>();
         for (String clz : map.keySet()) {
             HashSet<SourceVO> dependents = map.get(clz);
@@ -61,7 +61,7 @@ public class Finder {
         return result;
     }
 
-    private static void addClass(Map<String, HashSet<SourceVO>> map, String clz, SourceVO vo) {
+    private  void addClass(Map<String, HashSet<SourceVO>> map, String clz, SourceVO vo) {
         HashSet<SourceVO> dependents = map.get(clz);
         if (dependents == null) {
             dependents = new HashSet<>();
@@ -72,7 +72,7 @@ public class Finder {
         }
     }
 
-    private static List<String> loadClassNames(String name) {
+    private List<String> loadClassNames(String name) {
         List<String> result = new ArrayList<>();
         String fileName = FilenameUtility.getFileName(name);
         try {
