@@ -95,7 +95,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private JProgressBar bar;
     private JBLabel label;
     private JBList myList;
-    private ClassListModal listModal = new ClassListModal(new ArrayList<>());
+    private ClassListModal listModal = new ClassListModal();
 
     protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
@@ -153,9 +153,11 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private void process(List<SourceVO> dependents) {
         new Thread(()-> {
             List<DuplicateClass> clz = Finder.process(this, dependents);
-            this.listModal.clear();
-            clz.forEach(c -> {
-                this.listModal.add(c.getFullName());
+            SwingUtilities.invokeLater(() -> {
+                this.listModal.clear();
+                clz.forEach(c -> {
+                    this.listModal.add(c.getFullName());
+                });
             });
         }).start();
     }

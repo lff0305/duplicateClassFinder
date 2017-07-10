@@ -1,6 +1,7 @@
 package org.lff.plugin.dupfinder;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,10 +10,9 @@ import java.util.List;
  */
 public class ClassListModal extends AbstractListModel<String> {
     private static final long serialVersionUID = 7214161645270908310L;
-    private final List<String> list;
+    private final List<String> list = new ArrayList<>();
 
-    public ClassListModal(List<String> list) {
-        this.list = list;
+    public ClassListModal() {
     }
 
     public List<String> getList() {
@@ -30,10 +30,11 @@ public class ClassListModal extends AbstractListModel<String> {
     }
 
     public void clear() {
-        int index0 = 0;
-        int index1 = list.size() - 1;
+        int index1 = list.size()-1;
         list.clear();
-        fireIntervalAdded(this, index0, index1);
+        if (index1 >= 0) {
+            fireIntervalRemoved(this, 0, index1);
+        }
     }
 
     public void add(String t) {
