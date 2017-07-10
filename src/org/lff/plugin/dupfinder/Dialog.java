@@ -28,11 +28,15 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by liuff on 2017/7/9 21:07
  */
 public class Dialog extends DialogWrapper implements ProgressListener {
+
+    private static final Logger logger = Logger.getLogger(Dialog.class.getName());
+
 
     private final Project project;
     private ProjectRootManager rootManager = null;
@@ -132,7 +136,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         List<SourceVO> dependents = new ArrayList<>();
         for (VirtualFile file : result) {
-            System.out.println("Module Root " + file);
+            logger.info("Module Root " + file);
             Module module = ModuleUtil.findModuleForFile(file, project);
             ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
