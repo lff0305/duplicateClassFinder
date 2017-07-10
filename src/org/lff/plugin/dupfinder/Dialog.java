@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * Created by liuff on 2017/7/9 21:07
  */
-public class Dialog extends DialogWrapper {
+public class Dialog extends DialogWrapper implements ProgressListener {
 
     private final Project project;
     private ProjectRootManager rootManager = null;
@@ -97,7 +97,7 @@ public class Dialog extends DialogWrapper {
         JBList myList = new JBList();
 
         JPanel north = new JPanel(new VerticalFlowLayout());
-        bar = new JProgressBar();
+        bar = new JProgressBar(0, 100);
         final JBSplitter mainPanel = new JBSplitter(true, 1f / 3);
 
         mainPanel.setFirstComponent(ScrollPaneFactory.createScrollPane(myList));
@@ -143,6 +143,16 @@ public class Dialog extends DialogWrapper {
     }
 
     private void process(Set<String> dependents) {
-        Finder.process(dependents);
+        new Thread(()-> {
+            Finder.process(this, dependents);
+        }).start();
+    }
+
+    @Override
+    public void onProgess(int percent, String message) {
+        SwingUtilities.invokeLater(() -> {
+            this.bar.setValue(percent);
+            this.label.setText(message);
+        });
     }
 }
