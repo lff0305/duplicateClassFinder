@@ -29,7 +29,7 @@
   </extensions>
 
   <actions>
-    <action class="org.lff.plugin.dupfinder.Plugin" id="dupfinder.plugin" text="Plugin Guide"
+    <action class="org.lff.plugin.dupfinder.Plugin" id="dupfinder.plugin" text="Search Duplicate Classes in jar files in classpath"
             description="A simple IDEA plugin." icon="/icons/icon20.png">
       <add-to-group group-id="MainToolBar" anchor="last"/>
     </action>

@@ -138,5 +138,11 @@ public class Dialog extends DialogWrapper {
         }
 
         label.setText("Total " + dependents.size() + " found.");
+
+        process(dependents);
+    }
+
+    private void process(Set<String> dependents) {
+        Finder.process(dependents);
     }
 }
