@@ -157,6 +157,13 @@ public class Dialog extends DialogWrapper implements ProgressListener {
             }
         });
 
+        btnClear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearFilter();
+            }
+        });
+
         return panel;
     }
 
@@ -229,5 +236,12 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         }
         this.listModal.clear();
         this.listModal.addAll(result);
+    }
+
+
+    private void clearFilter() {
+        this.filter.setText("");
+        this.listModal.clear();
+        this.listModal.restore();
     }
 }

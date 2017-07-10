@@ -52,8 +52,18 @@ public class ClassListModel extends AbstractListModel<String> {
     }
 
     public void addAll(List<String> result) {
+        if (result.isEmpty()) {
+            return;
+        }
         int size = list.size();
         this.list.addAll(result);
         fireIntervalAdded(this, size, list.size() - 1);
+    }
+
+    public void restore() {
+        this.clear();
+        this.addAll(savedList);
+        this.list.clear();
+        this.list.addAll(savedList);
     }
 }
