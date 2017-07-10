@@ -27,7 +27,6 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,20 +41,19 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         super(false);
         this.rootManager = rootManager;
         this.project = project;
+        listModal = new ClassListModel();
+        tableModel = new DuplicatesTableModel();
     }
 
     public void init() {
         super.init();
-
-
-        listModal = new ClassListModel();
-        tableModel = new DuplicatesTableModel();
 
         setTitle("Find Duplicate classes in classpath");
 
         getWindow().addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {
+                getWindow().setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 javax.swing.SwingUtilities.invokeLater(() -> process());
             }
 
@@ -142,9 +140,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
                 @Override
                 public boolean process(Library library) {
                     String libraryName = library.getName() == null ? "<JAR>" : library.getName();
-                    System.out.println("name = "+ libraryName);
                     String[] urls = library.getRootProvider().getUrls(OrderRootType.CLASSES);
-                    System.out.println(Arrays.toString(urls));
                     for (String url : urls) {
                         dependents.add(new SourceVO(libraryName, url));
                     }
@@ -160,13 +156,14 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
     private void process(List<SourceVO> dependents) {
         new Thread(()-> {
-            List<DuplicateClass> clz = Finder.process(this, dependents);
+            List<DuplicateClass> clz = new Finder().process(this, dependents);
             SwingUtilities.invokeLater(() -> {
                 this.listModal.clear();
                 clz.forEach(c -> {
                     this.listModal.add(c.getFullName());
                     tableModel.setDependents(c.getFullName(), c.getDependents());
                 });
+                getWindow().setCursor(Cursor.getDefaultCursor());
             });
         }).start();
     }
