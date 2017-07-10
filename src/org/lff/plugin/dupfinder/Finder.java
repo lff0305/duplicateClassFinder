@@ -35,9 +35,10 @@ public class Finder {
                 }
             }
         }
-        listener.onProgess((int)((totalSize - 1) / (float)(totalSize)), "Calculating... ");
+        listener.onProgess((int)(100 * (totalSize - 1) / (float)(totalSize)), "Calculating... ");
         List<DuplicateClass> result = findDuplicates(map);
-        listener.onProgess(100, "Finished.");
+        listener.onProgess(100, "Finished. " + result.size() + " duplicate class found in " + dependents.size() +
+                        " files");
         logger.info("--- Duplicates " + result.size() + " START ---");
         for (DuplicateClass clz : result) {
             logger.info("        " + clz.getFullName());
