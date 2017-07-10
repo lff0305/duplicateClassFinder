@@ -1,5 +1,6 @@
 package org.lff.plugin.dupfinder;
 
+import org.lff.plugin.dupfinder.utility.FilenameUtility;
 import org.lff.plugin.dupfinder.vo.DuplicateClass;
 
 import java.io.IOException;
@@ -53,8 +54,9 @@ public class Finder {
 
     private static List<String> loadClassNames(String name) {
         List<String> result = new ArrayList<>();
+        String fileName = FilenameUtility.getFileName(name);
         try {
-            JarFile file = new JarFile(name);
+            JarFile file = new JarFile(fileName);
             Enumeration<JarEntry> entries = file.entries();
             while (entries.hasMoreElements()) {
                 JarEntry e = entries.nextElement();
