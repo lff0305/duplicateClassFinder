@@ -1,8 +1,5 @@
 package org.lff.plugin.dupfinder.utility;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 /**
  * @author Feifei Liu
  * @datetime Jul 10 2017 10:35

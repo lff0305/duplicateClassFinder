@@ -1,7 +1,5 @@
 package org.lff.plugin.dupfinder.vo;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

@@ -18,7 +18,6 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
-import org.jdesktop.swingx.HorizontalLayout;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 import org.lff.plugin.dupfinder.vo.DuplicateClass;
 import org.lff.plugin.dupfinder.vo.SourceVO;
@@ -27,7 +26,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
