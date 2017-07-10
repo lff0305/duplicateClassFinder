@@ -2,6 +2,7 @@ package org.lff.plugin.dupfinder;
 
 import org.lff.plugin.dupfinder.utility.FilenameUtility;
 import org.lff.plugin.dupfinder.vo.DuplicateClass;
+import org.lff.plugin.dupfinder.vo.SourceVO;
 
 import java.io.IOException;
 import java.util.*;
@@ -17,11 +18,13 @@ public class Finder {
 
     private static final Logger logger = Logger.getLogger(Finder.class.getName());
 
-    public static List<DuplicateClass> process(ProgressListener listener, Set<String> dependents) {
-        Map<String, HashSet<String>> map = new HashMap<>();
+    public static List<DuplicateClass> process(ProgressListener listener, List<SourceVO> dependents) {
+        Map<String, HashSet<SourceVO>> map = new HashMap<>();
         int totalSize = dependents.size() + 2;
         int count = 0;
-        for (String name : dependents) {
+        for (SourceVO vo : dependents) {
+            String name = vo.getUrl();
+            String library = vo.getLibrary();
             count++;
             listener.onProgess((int)( 100 * count / (float)(totalSize)), "Processing " + name);
             if (name == null) {
@@ -31,7 +34,7 @@ public class Finder {
             if (name.startsWith("jar://")) {
                 List<String> classes = loadClassNames(name);
                 for (String clz : classes) {
-                    addClass(map, clz, name);
+                    addClass(map, clz, vo);
                 }
             }
         }
@@ -47,10 +50,10 @@ public class Finder {
         return result;
     }
 
-    private static List<DuplicateClass> findDuplicates(Map<String, HashSet<String>> map) {
+    private static List<DuplicateClass> findDuplicates(Map<String, HashSet<SourceVO>> map) {
         List<DuplicateClass> result = new ArrayList<>();
         for (String clz : map.keySet()) {
-            HashSet<String> dependents = map.get(clz);
+            HashSet<SourceVO> dependents = map.get(clz);
             if (dependents != null && dependents.size() > 1) {
                 result.add(new DuplicateClass(clz, dependents));
             }
@@ -58,14 +61,14 @@ public class Finder {
         return result;
     }
 
-    private static void addClass(Map<String, HashSet<String>> map, String clz, String name) {
-        HashSet<String> dependents = map.get(clz);
+    private static void addClass(Map<String, HashSet<SourceVO>> map, String clz, SourceVO vo) {
+        HashSet<SourceVO> dependents = map.get(clz);
         if (dependents == null) {
             dependents = new HashSet<>();
-            dependents.add(name);
+            dependents.add(vo);
             map.put(clz, dependents);
         } else {
-            dependents.add(name);
+            dependents.add(vo);
         }
     }
 
@@ -87,6 +90,7 @@ public class Finder {
                 if (!entryName.endsWith(".class")) {
                     continue;
                 }
+                logger.info("Adding " + entryName);
                 result.add(entryName);
             }
         } catch (IOException e) {

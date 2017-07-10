@@ -20,12 +20,15 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 import org.jdesktop.swingx.HorizontalLayout;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
+import org.lff.plugin.dupfinder.vo.DuplicateClass;
+import org.lff.plugin.dupfinder.vo.SourceVO;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by liuff on 2017/7/9 21:07
@@ -91,10 +94,12 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
     private JProgressBar bar;
     private JBLabel label;
+    private JBList myList;
+    private ClassListModal listModal = new ClassListModal(new ArrayList<>());
 
     protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
-        JBList myList = new JBList();
+        myList = new JBList(listModal);
 
         JPanel north = new JPanel(new VerticalFlowLayout());
         bar = new JProgressBar(0, 100);
@@ -119,7 +124,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         java.util.List<VirtualFile> result = (rootManager.getModuleSourceRoots(ContainerUtil.set(JavaSourceRootType.SOURCE)));
 
-        Set<String> dependents = new HashSet<>();
+        List<SourceVO> dependents = new ArrayList<>();
         for (VirtualFile file : result) {
             System.out.println("Module Root " + file);
             Module module = ModuleUtil.findModuleForFile(file, project);
@@ -128,10 +133,13 @@ public class Dialog extends DialogWrapper implements ProgressListener {
             ModuleRootManager.getInstance(module).orderEntries().forEachLibrary(new Processor<Library>() {
                 @Override
                 public boolean process(Library library) {
-                    System.out.println("name = "+ library.getName() + " ");
+                    String libraryName = library.getName() == null ? "<JAR>" : library.getName();
+                    System.out.println("name = "+ libraryName);
                     String[] urls = library.getRootProvider().getUrls(OrderRootType.CLASSES);
                     System.out.println(Arrays.toString(urls));
-                    dependents.addAll(Arrays.asList(urls));
+                    for (String url : urls) {
+                        dependents.add(new SourceVO(libraryName, url));
+                    }
                     return true;
                 }
             });
@@ -142,9 +150,13 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         process(dependents);
     }
 
-    private void process(Set<String> dependents) {
+    private void process(List<SourceVO> dependents) {
         new Thread(()-> {
-            Finder.process(this, dependents);
+            List<DuplicateClass> clz = Finder.process(this, dependents);
+            this.listModal.clear();
+            clz.forEach(c -> {
+                this.listModal.add(c.getFullName());
+            });
         }).start();
     }
 

@@ -11,7 +11,7 @@ import java.util.Set;
 public class DuplicateClass {
 
 
-    public DuplicateClass(String fullName, Set<String> dependents) {
+    public DuplicateClass(String fullName, Set<SourceVO> dependents) {
         this.fullName = fullName;
         this.dependents = dependents;
     }
@@ -24,15 +24,15 @@ public class DuplicateClass {
         this.fullName = fullName;
     }
 
-    public Set<String> getDependents() {
+    public Set<SourceVO> getDependents() {
         return dependents;
     }
 
-    public void setDependents(Set<String> dependents) {
+    public void setDependents(Set<SourceVO> dependents) {
         this.dependents = dependents;
     }
 
     private String fullName;
 
-    private Set<String> dependents;
+    private Set<SourceVO> dependents;
 }
