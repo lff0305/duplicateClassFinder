@@ -132,7 +132,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         north.add(label = new JBLabel("Duplicate classes found"));
         north.add(bar);
 
-        JPanel panelSearch = new JPanel(new HorizontalLayout());
+        JPanel panelSearch = new JPanel(new HorizontalLayout(12));
         filter = new JBTextField("", 32);
         btnOK = new JButton("Filter");
         btnClear = new JButton("Clear");
