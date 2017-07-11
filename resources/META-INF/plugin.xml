@@ -1,17 +1,15 @@
 <idea-plugin>
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
-  <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <id>org.lff.plugin.dupfinder</id>
+  <name>duplicateClassFinder</name>
+  <version>0.1</version>
+  <vendor email="lff0305@gmail.com" url="https://github.com/lff0305/duplicateClassFinder">LFF</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      Finds the duplicate classes in dependencies
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+        v0.1&nbsp;First release candidate.
     ]]>
   </change-notes>
 
@@ -30,8 +28,9 @@
 
   <actions>
     <action class="org.lff.plugin.dupfinder.Plugin" id="dupfinder.plugin" text="Search Duplicate Classes in jar files in classpath"
-            description="A simple IDEA plugin." icon="/icons/icon20.png">
+            description="Plugin to find duplicate classes" icon="/icons/icon20.png">
       <add-to-group group-id="MainToolBar" anchor="last"/>
+      <add-to-group group-id="AnalyzeMenu" anchor="last"/>
     </action>
   </actions>
 
