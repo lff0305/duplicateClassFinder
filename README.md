@@ -20,4 +20,6 @@ Install the plugin, and click the button on the right of the toolbar:
 
 ![image](https://github.com/lff0305/duplicateClassFinder/blob/master/images/usage.png)
 
+Or click Menu "Analize - Search Duplicate Classes in jar files"
+
 For any issue, please submit an [issue](https://github.com/lff0305/duplicateClassFinder/issues)
