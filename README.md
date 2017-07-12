@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/release-0.1-green.svg)
+![](https://img.shields.io/badge/pre%20release-0.1-green.svg)
 ![](https://img.shields.io/badge/By-Liu%20Feifei-blue.svg)
 ![](https://img.shields.io/github/license/mashape/apistatus.svg)
 
