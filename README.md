@@ -14,6 +14,8 @@ Sources (JAR, Library, or MAVEN, etc) are provided for each duplicated classes.
 
 # How to use:
 
+Download the [latest release](https://github.com/lff0305/duplicateClassFinder/files/1140891/dupFinder.zip)
+
 Install the plugin, and click the button on the right of the toolbar:
 
 ![image](https://github.com/lff0305/duplicateClassFinder/blob/master/images/usage.png)
