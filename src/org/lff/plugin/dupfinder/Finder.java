@@ -16,6 +16,9 @@ import java.util.logging.Logger;
  */
 public class Finder {
 
+    private volatile boolean stopped = false;
+
+
     private static final Logger logger = Logger.getLogger(Finder.class.getName());
 
     public List<DuplicateClass> process(ProgressListener listener, List<SourceVO> dependents) {
@@ -23,6 +26,10 @@ public class Finder {
         int totalSize = dependents.size() + 2;
         int count = 0;
         for (SourceVO vo : dependents) {
+            if (stopped) {
+                return new ArrayList<>();
+            }
+
             String name = vo.getUrl();
             String library = vo.getLibrary();
             count++;
@@ -53,6 +60,9 @@ public class Finder {
     private List<DuplicateClass> findDuplicates(Map<String, HashSet<SourceVO>> map) {
         List<DuplicateClass> result = new ArrayList<>();
         for (String clz : map.keySet()) {
+            if (stopped) {
+                return new ArrayList<>();
+            }
             HashSet<SourceVO> dependents = map.get(clz);
             if (dependents != null && dependents.size() > 1) {
                 result.add(new DuplicateClass(clz, dependents));
@@ -92,9 +102,17 @@ public class Finder {
                 }
                 logger.info("Adding " + entryName);
                 result.add(entryName);
+                if (stopped) {
+                    return result;
+                }
             }
         } catch (IOException e) {
         }
         return result;
+    }
+
+    public void stop() {
+        logger.info("STOP called");
+        this.stopped = true;
     }
 }

@@ -45,6 +45,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
 
     private final Project project;
+    private Finder finder;
     private ProjectRootManager rootManager = null;
 
     public Dialog(Project project, ProjectRootManager rootManager) {
@@ -74,7 +75,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
             @Override
             public void windowClosed(WindowEvent e) {
-
+                fireStop();
             }
 
             @Override
@@ -198,9 +199,21 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         process(dependents);
     }
 
+    private void setFinder(Finder finder) {
+        this.finder = finder;
+    }
+
+    private void fireStop() {
+        if (this.finder != null) {
+            this.finder.stop();
+        }
+    }
+
     private void process(List<SourceVO> dependents) {
         new Thread(()-> {
-            List<DuplicateClass> clz = new Finder().process(this, dependents);
+            Finder finder = new Finder();
+            setFinder(finder);
+            List<DuplicateClass> clz = finder.process(this, dependents);
             Collections.sort(clz);
             SwingUtilities.invokeLater(() -> {
                 this.listModal.clear();
@@ -211,6 +224,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
                 getWindow().setCursor(Cursor.getDefaultCursor());
                 btnOK.setEnabled(true);
                 btnClear.setEnabled(true);
+                this.finder = null;
             });
         }).start();
     }
