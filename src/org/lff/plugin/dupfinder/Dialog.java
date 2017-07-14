@@ -241,8 +241,8 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         String filter = this.filter.getText();
         if (filter.equals("") || filter.trim().equals("")) {
             Messages.showMessageDialog(project,
-                    "Filter is empty", "Information",
-                    Messages.getInformationIcon());
+                    "Filter is empty", "Error",
+                    Messages.getErrorIcon());
         }
         this.listModal.saveList();
         List<String> result = new ArrayList<>();
