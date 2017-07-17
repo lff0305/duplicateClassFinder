@@ -26,12 +26,14 @@ import org.jetbrains.jps.model.java.JavaSourceRootType;
 import org.lff.plugin.dupfinder.vo.DuplicateClass;
 import org.lff.plugin.dupfinder.vo.SourceVO;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -138,7 +140,17 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         JPanel panelSearch = new JPanel(new HorizontalLayout(12));
         btnStart = new JButton("Start");
+
+        Image img = null;
+        try {
+            img = ImageIO.read(getClass().getResource("/icons/start-icon.png"));
+            btnStart.setIcon(new ImageIcon(img));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         btnStart.setToolTipText("Start to find duplicate classes in project");
+
         chkAllowSameClassInDifferentModules = new JBCheckBox("Skip different modules");
         chkAllowSameClassInDifferentModules.setToolTipText("Allow same class occurs in different modules.");
         filter = new JBTextField("", 22);
@@ -231,7 +243,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         new Thread(()-> {
             Finder finder = new Finder();
             setFinder(finder);
-            List<DuplicateClass> clz = finder.process(this, dependents);
+            List<DuplicateClass> clz = finder.process(this, dependents, allowSameClassInDifferentModulesSelected);
             Collections.sort(clz);
             SwingUtilities.invokeLater(() -> {
                 this.listModal.clear();
