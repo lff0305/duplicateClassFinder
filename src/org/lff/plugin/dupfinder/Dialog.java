@@ -195,6 +195,8 @@ public class Dialog extends DialogWrapper implements ProgressListener {
             getWindow().setCursor(new Cursor(Cursor.WAIT_CURSOR));
             javax.swing.SwingUtilities.invokeLater(() -> {
                 boolean allowSameClassInDifferentModulesSelected = chkAllowSameClassInDifferentModules.isSelected();
+                this.tableModel.clear();
+                this.listModal.clear();
                 process(allowSameClassInDifferentModulesSelected);
             });
         });
