@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class DuplicatesTableModel extends AbstractTableModel {
 
-    static final String[] NAMES = new String[]{"Type", "Library"};
+    static final String[] NAMES = new String[]{"Type", "Module", "Library"};
     private static final long serialVersionUID = 2834765790738917135L;
 
     private List<Map<Integer, String>> data = new LinkedList<>();
@@ -35,7 +35,7 @@ public class DuplicatesTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -47,7 +47,8 @@ public class DuplicatesTableModel extends AbstractTableModel {
     public void add(SourceVO vo) {
         Map<Integer, String> rowData = new HashMap<>();
         rowData.put(0, vo.getLibrary());
-        rowData.put(1, vo.getUrl());
+        rowData.put(1, vo.getModule());
+        rowData.put(2, vo.getUrl());
         data.add(rowData);
         int index0 = data.size() - 1;
         int index1 = index0;
