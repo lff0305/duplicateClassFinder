@@ -13,6 +13,7 @@ import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBTextField;
@@ -115,6 +116,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private JButton btnClear;
     private JBLabel filterLabel;
 
+    private JCheckBox chkAllowSameClassInDifferentModules;
 
     private JButton btnStart;
     protected JComponent createCenterPanel() {
@@ -136,9 +138,11 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         JPanel panelSearch = new JPanel(new HorizontalLayout(12));
         btnStart = new JButton("Start");
-        filter = new JBTextField("", 32);
+        chkAllowSameClassInDifferentModules = new JBCheckBox("Same Module");
+        filter = new JBTextField("", 22);
         btnOK = new JButton("Filter");
         btnClear = new JButton("Clear");
+        panelSearch.add(chkAllowSameClassInDifferentModules);
         panelSearch.add(btnStart);
         panelSearch.add(filter);
         panelSearch.add(btnOK);
