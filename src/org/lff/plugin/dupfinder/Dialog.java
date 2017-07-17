@@ -138,10 +138,14 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         JPanel panelSearch = new JPanel(new HorizontalLayout(12));
         btnStart = new JButton("Start");
-        chkAllowSameClassInDifferentModules = new JBCheckBox("Same Module");
+        btnStart.setToolTipText("Start to find duplicate classes in project");
+        chkAllowSameClassInDifferentModules = new JBCheckBox("Skip different modules");
+        chkAllowSameClassInDifferentModules.setToolTipText("Allow same class occurs in different modules.");
         filter = new JBTextField("", 22);
         btnOK = new JButton("Filter");
+        btnOK.setToolTipText("Filter classes which contain the inputed name");
         btnClear = new JButton("Clear");
+        btnClear.setToolTipText("Clear filter");
         panelSearch.add(chkAllowSameClassInDifferentModules);
         panelSearch.add(btnStart);
         panelSearch.add(filter);
