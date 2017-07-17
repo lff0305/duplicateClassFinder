@@ -187,7 +187,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
                     String libraryName = library.getName() == null ? "<JAR>" : library.getName();
                     String[] urls = library.getRootProvider().getUrls(OrderRootType.CLASSES);
                     for (String url : urls) {
-                        dependents.add(new SourceVO(libraryName, url));
+                        dependents.add(new SourceVO(module.getName(), libraryName, url));
                     }
                     return true;
                 }

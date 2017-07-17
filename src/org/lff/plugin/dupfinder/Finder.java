@@ -46,7 +46,7 @@ public class Finder {
             }
         }
         listener.onProgress((int)(100 * (totalSize - 1) / (float)(totalSize)), "Calculating... ");
-        List<DuplicateClass> result = findDuplicates(map);
+        List<DuplicateClass> result = findDuplicates(map, false);
         listener.onProgress(100, "Finished. " + result.size() + " duplicate class found in " + dependents.size() +
                         " files");
         logger.info("--- Duplicates " + result.size() + " START ---");
@@ -57,15 +57,35 @@ public class Finder {
         return result;
     }
 
-    private List<DuplicateClass> findDuplicates(Map<String, HashSet<SourceVO>> map) {
+    private List<DuplicateClass> findDuplicates(Map<String, HashSet<SourceVO>> map, boolean allowSameClassInDifferentModules) {
         List<DuplicateClass> result = new ArrayList<>();
         for (String clz : map.keySet()) {
             if (stopped) {
                 return new ArrayList<>();
             }
             HashSet<SourceVO> dependents = map.get(clz);
-            if (dependents != null && dependents.size() > 1) {
-                result.add(new DuplicateClass(clz, dependents));
+            if (!allowSameClassInDifferentModules) {
+                if (dependents != null && dependents.size() > 1) {
+                    result.add(new DuplicateClass(clz, dependents));
+                }
+            } else {
+                Map<String, Integer> moduleMap = new HashMap<>();
+                for (SourceVO vo : dependents) {
+                    String module = vo.getModule();
+                    Integer count = moduleMap.get(module);
+                    if (count == null) {
+                        count = 0;
+                    }
+                    count++;
+                    moduleMap.put(module, count);
+                }
+                for (String module : moduleMap.keySet()) {
+                    int count = moduleMap.get(module);
+                    if (count > 1) {
+                        result.add(new DuplicateClass(clz, dependents));
+                    }
+                }
+                moduleMap = null;
             }
         }
         return result;
