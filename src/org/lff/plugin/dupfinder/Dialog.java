@@ -64,8 +64,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         getWindow().addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {
-                getWindow().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                javax.swing.SwingUtilities.invokeLater(() -> process());
+
             }
 
             @Override
@@ -116,6 +115,8 @@ public class Dialog extends DialogWrapper implements ProgressListener {
     private JButton btnClear;
     private JBLabel filterLabel;
 
+
+    private JButton btnStart;
     protected JComponent createCenterPanel() {
         final JPanel panel = new JPanel(new BorderLayout(UIUtil.DEFAULT_HGAP, UIUtil.DEFAULT_VGAP));
         myList = new JBList(listModal);
@@ -134,9 +135,11 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         north.add(bar);
 
         JPanel panelSearch = new JPanel(new HorizontalLayout(12));
+        btnStart = new JButton("Start");
         filter = new JBTextField("", 32);
         btnOK = new JButton("Filter");
         btnClear = new JButton("Clear");
+        panelSearch.add(btnStart);
         panelSearch.add(filter);
         panelSearch.add(btnOK);
         panelSearch.add(btnClear);
@@ -168,6 +171,10 @@ public class Dialog extends DialogWrapper implements ProgressListener {
             }
         });
 
+        btnStart.addActionListener(l -> {
+            getWindow().setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            javax.swing.SwingUtilities.invokeLater(() -> process());
+        });
         return panel;
     }
 
