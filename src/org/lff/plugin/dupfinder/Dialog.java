@@ -181,12 +181,15 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         btnStart.addActionListener(l -> {
             getWindow().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            javax.swing.SwingUtilities.invokeLater(() -> process());
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                boolean allowSameClassInDifferentModulesSelected = chkAllowSameClassInDifferentModules.isSelected();
+                process(allowSameClassInDifferentModulesSelected);
+            });
         });
         return panel;
     }
 
-    public void process() {
+    public void process(boolean allowSameClassInDifferentModulesSelected) {
 
         java.util.List<VirtualFile> result = (rootManager.getModuleSourceRoots(ContainerUtil.set(JavaSourceRootType.SOURCE)));
 
@@ -211,7 +214,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
 
         label.setText("Total " + dependents.size() + " found.");
 
-        process(dependents);
+        process(dependents, allowSameClassInDifferentModulesSelected);
     }
 
     private void setFinder(Finder finder) {
@@ -224,7 +227,7 @@ public class Dialog extends DialogWrapper implements ProgressListener {
         }
     }
 
-    private void process(List<SourceVO> dependents) {
+    private void process(List<SourceVO> dependents, boolean allowSameClassInDifferentModulesSelected) {
         new Thread(()-> {
             Finder finder = new Finder();
             setFinder(finder);

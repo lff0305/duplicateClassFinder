@@ -21,7 +21,7 @@ public class Finder {
 
     private static final Logger logger = Logger.getLogger(Finder.class.getName());
 
-    public List<DuplicateClass> process(ProgressListener listener, List<SourceVO> dependents) {
+    public List<DuplicateClass> process(ProgressListener listener, List<SourceVO> dependents, boolean allowSameClassInDifferentModulesSelected) {
         Map<String, HashSet<SourceVO>> map = new HashMap<>();
         int totalSize = dependents.size() + 2;
         int count = 0;
@@ -46,7 +46,7 @@ public class Finder {
             }
         }
         listener.onProgress((int)(100 * (totalSize - 1) / (float)(totalSize)), "Calculating... ");
-        List<DuplicateClass> result = findDuplicates(map, false);
+        List<DuplicateClass> result = findDuplicates(map, allowSameClassInDifferentModulesSelected);
         listener.onProgress(100, "Finished. " + result.size() + " duplicate class found in " + dependents.size() +
                         " files");
         logger.info("--- Duplicates " + result.size() + " START ---");
