@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>org.lff.plugin.dupfinder</id>
   <name>duplicateClassFinder</name>
-  <version>0.1</version>
+  <version>0.2</version>
   <vendor email="lff0305@gmail.com" url="https://github.com/lff0305/duplicateClassFinder">LFF</vendor>
 
   <description><![CDATA[
@@ -10,6 +10,7 @@
 
   <change-notes><![CDATA[
         v0.1&nbsp;First release candidate.
+        v0.2&nbsp;Improve UI: Add column for module name; Add Start Button; Add an option to check classes in different modules
     ]]>
   </change-notes>
 
