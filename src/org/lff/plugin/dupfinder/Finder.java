@@ -49,11 +49,6 @@ public class Finder {
         List<DuplicateClass> result = findDuplicates(map, allowSameClassInDifferentModulesSelected);
         listener.onProgress(100, "Finished. " + result.size() + " duplicate class found in " + dependents.size() +
                         " files");
-        logger.info("--- Duplicates " + result.size() + " START ---");
-        for (DuplicateClass clz : result) {
-            logger.info("        " + clz.getFullName());
-        }
-        logger.info("--- Duplicates END ---  ");
         return result;
     }
 
@@ -120,7 +115,6 @@ public class Finder {
                 if (!entryName.endsWith(".class")) {
                     continue;
                 }
-                logger.info("Adding " + entryName);
                 result.add(entryName);
                 if (stopped) {
                     return result;
