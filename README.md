@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/pre%20release-0.1-green.svg)
+![](https://img.shields.io/badge/pre%20release-0.2-green.svg)
 ![](https://img.shields.io/badge/By-Liu%20Feifei-blue.svg)
 ![](https://img.shields.io/github/license/mashape/apistatus.svg)
 
@@ -8,7 +8,7 @@ For example, 2 different versions of jars are added to library, which may cause 
 
 # UI :
 
-![image](https://github.com/lff0305/duplicateClassFinder/blob/master/images/dig.png)
+![image](https://github.com/lff0305/duplicateClassFinder/blob/master/images/dlg.png)
 
 Sources (JAR, Library, or MAVEN, etc) are provided for each duplicated classes.
 
