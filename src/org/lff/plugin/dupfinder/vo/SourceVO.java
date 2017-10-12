@@ -4,7 +4,7 @@ package org.lff.plugin.dupfinder.vo;
  * @author Feifei Liu
  * @datetime Jul 10 2017 11:41
  */
-public class SourceVO {
+public class SourceVO implements Comparable<SourceVO> {
     public String getModule() {
         return module;
     }
@@ -47,5 +47,18 @@ public class SourceVO {
         result = 31 * result + (library != null ? library.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(SourceVO o) {
+        int v = module.compareTo(o.module);
+        if (v != 0) {
+            return v;
+        }
+        v = library.compareTo(o.library);
+        if (v != 0) {
+            return v;
+        }
+        return url.compareTo(o.url);
     }
 }

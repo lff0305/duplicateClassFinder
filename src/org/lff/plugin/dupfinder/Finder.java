@@ -22,7 +22,7 @@ public class Finder {
     private static final Logger logger = Logger.getLogger(Finder.class.getName());
 
     public List<DuplicateClass> process(ProgressListener listener, List<SourceVO> dependents, boolean allowSameClassInDifferentModulesSelected) {
-        Map<String, HashSet<SourceVO>> map = new HashMap<>();
+        Map<String, TreeSet<SourceVO>> map = new HashMap<>();
         int totalSize = dependents.size() + 2;
         int count = 0;
         for (SourceVO vo : dependents) {
@@ -52,13 +52,13 @@ public class Finder {
         return result;
     }
 
-    private List<DuplicateClass> findDuplicates(Map<String, HashSet<SourceVO>> map, boolean allowSameClassInDifferentModules) {
+    private List<DuplicateClass> findDuplicates(Map<String, TreeSet<SourceVO>> map, boolean allowSameClassInDifferentModules) {
         List<DuplicateClass> result = new ArrayList<>();
         for (String clz : map.keySet()) {
             if (stopped) {
                 return new ArrayList<>();
             }
-            HashSet<SourceVO> dependents = map.get(clz);
+            TreeSet<SourceVO> dependents = map.get(clz);
             if (!allowSameClassInDifferentModules) {
                 if (dependents != null && dependents.size() > 1) {
                     result.add(new DuplicateClass(clz, dependents));
@@ -78,6 +78,7 @@ public class Finder {
                     int count = moduleMap.get(module);
                     if (count > 1) {
                         result.add(new DuplicateClass(clz, dependents));
+                        break;
                     }
                 }
                 moduleMap = null;
@@ -86,10 +87,10 @@ public class Finder {
         return result;
     }
 
-    private  void addClass(Map<String, HashSet<SourceVO>> map, String clz, SourceVO vo) {
-        HashSet<SourceVO> dependents = map.get(clz);
+    private  void addClass(Map<String, TreeSet<SourceVO>> map, String clz, SourceVO vo) {
+        TreeSet<SourceVO> dependents = map.get(clz);
         if (dependents == null) {
-            dependents = new HashSet<>();
+            dependents = new TreeSet<>();
             dependents.add(vo);
             map.put(clz, dependents);
         } else {
